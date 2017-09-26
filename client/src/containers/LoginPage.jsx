@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import LoginForm from '../components/LoginForm.jsx';
+import Request from 'superagent';
 
 
 class LoginPage extends React.Component {
@@ -21,6 +22,7 @@ class LoginPage extends React.Component {
 
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
+   
   }
 
   /**
@@ -34,6 +36,34 @@ class LoginPage extends React.Component {
 
     console.log('email:', this.state.user.email);
     console.log('password:', this.state.user.password);
+    var Url = "http://localhost:3002/UserCredential/validate";
+    Request.post(Url)
+    .send({
+      "UserCredential": {
+      "email": "nethra.madesh@gmail.com",
+      "password": "Tesco@123",
+      "name":"nethra"
+      }
+      })
+    .then((response) =>
+    {
+      if(response.statusCode!=200)
+      {
+      const errors = {};
+      errors.password = "Invalid User"
+this.setState({
+  errors
+})
+
+
+      }
+else{
+  console.log(response.status);
+}
+
+    });
+    
+    
   }
 
   /**
